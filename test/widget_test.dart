@@ -9,22 +9,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:gui_model/main.dart';
+import 'package:gui_model/mock/serviceMock.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const FrontendApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  ServiceMock.initInstance();
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  String? one = '';
+  String? two = '';
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  test('Service mock creation', () {
+    expect(0, ServiceMock.instance()?.size());
   });
+
+  test('Service mock add', () {
+    one = ServiceMock.instance()?.add();
+    expect(1, ServiceMock.instance()?.size());
+
+  });
+
+  test('Service mock add', () {
+    two = ServiceMock.instance()?.add();
+    expect(2, ServiceMock.instance()?.size());
+  });
+
+  test('Service mock remove', () {
+    ServiceMock.instance()?.remove(one);
+    expect(1, ServiceMock.instance()?.size());
+    ServiceMock.instance()?.remove(two);
+    expect(0, ServiceMock.instance()?.size());
+  });
+
 }
+
+

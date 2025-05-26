@@ -43,14 +43,23 @@ class HomePage extends StatelessWidget {
                     final item = state.items[index];
                     return Dismissible(
                       key: Key(item.id),
+                      direction: DismissDirection.horizontal,
                       onDismissed: (direction) {
                         context.read<ItemsBloc>().add(RemoveItemEvent(item.id));
                       },
+                      //  Swipe left->right
                       background: Container(
                         color: Colors.blueGrey.shade200,
                         alignment: Alignment.centerRight,
                         padding: const EdgeInsets.only(right: 16),
                         child: const Icon(Icons.delete, color: Colors.white),
+                      ),
+                      //  Swipe right->left
+                      secondaryBackground: Container(
+                        color: Colors.deepPurple.shade200,
+                        alignment: Alignment.centerLeft,
+                        padding: const EdgeInsets.only(left: 16),
+                        child: const Icon(Icons.delete_forever, color: Colors.white),
                       ),
                       child: CustomCardView(item: item),
                     );

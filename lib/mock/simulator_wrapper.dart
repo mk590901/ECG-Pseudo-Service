@@ -1,0 +1,25 @@
+import 'dart:math';
+import 'package:uuid/uuid.dart';
+
+import '../ecg_simulator/ecg_simulator.dart';
+import '../utils.dart';
+
+class SimulatorWrapper {
+  final String _id = const Uuid().v4().toString();
+  final Random random = Random();
+  final int _seriesLength = getSeriesLength();
+  late final EcgSimulator _ecgSimulator = EcgSimulator(_seriesLength);
+
+  String id() {
+    return _id;
+  }
+  
+  int length() {
+    return _seriesLength;
+  }
+
+  List<double> rowData() {
+    return _ecgSimulator.generateECGData();
+  }
+
+}
