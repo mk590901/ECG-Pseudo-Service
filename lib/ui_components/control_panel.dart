@@ -24,10 +24,10 @@ class ControlPanel extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Text(state.isMode1 ? 'Mode1' : 'Mode2'),
+                  Text(state.isServer ? 'Server' : 'Client'),
                   const SizedBox(width: 8),
                   Switch(
-                    value: state.isMode1,
+                    value: state.isServer,
                     onChanged: (value) {
                       context.read<AppBloc>().add(ToggleModeEvent());
                     },

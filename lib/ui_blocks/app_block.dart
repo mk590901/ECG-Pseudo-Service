@@ -9,32 +9,32 @@ class ToggleModeEvent extends AppEvent {}
 
 class AppState {
   final bool isRunning;
-  final bool isMode1;
+  final bool isServer;
 
   AppState({
     required this.isRunning,
-    required this.isMode1,
+    required this.isServer,
   });
 
   AppState copyWith({
     bool? isRunning,
-    bool? isMode1,
+    bool? isServer,
   }) {
     return AppState(
       isRunning: isRunning ?? this.isRunning,
-      isMode1: isMode1 ?? this.isMode1,
+      isServer: isServer ?? this.isServer,
     );
   }
 }
 
 class AppBloc extends Bloc<AppEvent, AppState> {
-  AppBloc() : super(AppState(isRunning: false, isMode1: true)) {
+  AppBloc() : super(AppState(isRunning: false, isServer: true)) {
     on<ToggleRunningEvent>((event, emit) {
       emit(state.copyWith(isRunning: !state.isRunning));
     });
 
     on<ToggleModeEvent>((event, emit) {
-      emit(state.copyWith(isMode1: !state.isMode1));
+      emit(state.copyWith(isServer: !state.isServer));
     });
   }
 }
