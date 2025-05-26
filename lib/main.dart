@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// Data model for list item
+// Data model for item
 class Item {
   final String id;
   final String title;
@@ -9,49 +9,36 @@ class Item {
   Item({required this.id, required this.title});
 }
 
-// Event BLoC
+// --- App BLoC (for Start/Stop и Mode1/Mode2) ---
+
 abstract class AppEvent {}
 
 class ToggleRunningEvent extends AppEvent {}
 
 class ToggleModeEvent extends AppEvent {}
 
-class AddItemEvent extends AppEvent {}
-
-class RemoveItemEvent extends AppEvent {
-  final String id;
-
-  RemoveItemEvent(this.id);
-}
-
-// State BLoC
 class AppState {
   final bool isRunning;
   final bool isMode1;
-  final List<Item> items;
 
   AppState({
     required this.isRunning,
     required this.isMode1,
-    required this.items,
   });
 
   AppState copyWith({
     bool? isRunning,
     bool? isMode1,
-    List<Item>? items,
   }) {
     return AppState(
       isRunning: isRunning ?? this.isRunning,
       isMode1: isMode1 ?? this.isMode1,
-      items: items ?? this.items,
     );
   }
 }
 
-// BLoC
 class AppBloc extends Bloc<AppEvent, AppState> {
-  AppBloc() : super(AppState(isRunning: false, isMode1: true, items: [])) {
+  AppBloc() : super(AppState(isRunning: false, isMode1: true)) {
     on<ToggleRunningEvent>((event, emit) {
       emit(state.copyWith(isRunning: !state.isRunning));
     });
@@ -59,7 +46,33 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<ToggleModeEvent>((event, emit) {
       emit(state.copyWith(isMode1: !state.isMode1));
     });
+  }
+}
 
+// --- Items BLoC (control elements list) ---
+
+abstract class ItemsEvent {}
+
+class AddItemEvent extends ItemsEvent {}
+
+class RemoveItemEvent extends ItemsEvent {
+  final String id;
+
+  RemoveItemEvent(this.id);
+}
+
+class ItemsState {
+  final List<Item> items;
+
+  ItemsState({required this.items});
+
+  ItemsState copyWith({List<Item>? items}) {
+    return ItemsState(items: items ?? this.items);
+  }
+}
+
+class ItemsBloc extends Bloc<ItemsEvent, ItemsState> {
+  ItemsBloc() : super(ItemsState(items: [])) {
     on<AddItemEvent>((event, emit) {
       final newItem = Item(
         id: DateTime.now().toString(),
@@ -76,14 +89,17 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 }
 
-// Main App
+// Main app
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AppBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => AppBloc()),
+        BlocProvider(create: (context) => ItemsBloc()),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -96,13 +112,12 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// Main page
+// Home page
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Create ScrollController
     final ScrollController scrollController = ScrollController();
 
     return Scaffold(
@@ -113,9 +128,8 @@ class HomePage extends StatelessWidget {
         children: [
           const ControlPanel(),
           Expanded(
-            child: BlocConsumer<AppBloc, AppState>(
+            child: BlocConsumer<ItemsBloc, ItemsState>(
               listener: (context, state) {
-                // When adding a new element, scroll to the end
                 if (state.items.isNotEmpty) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     scrollController.animateTo(
@@ -135,7 +149,7 @@ class HomePage extends StatelessWidget {
                     return Dismissible(
                       key: Key(item.id),
                       onDismissed: (direction) {
-                        context.read<AppBloc>().add(RemoveItemEvent(item.id));
+                        context.read<ItemsBloc>().add(RemoveItemEvent(item.id));
                       },
                       background: Container(
                         color: Colors.red,
@@ -154,7 +168,7 @@ class HomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.read<AppBloc>().add(AddItemEvent());
+          context.read<ItemsBloc>().add(AddItemEvent());
         },
         child: const Icon(Icons.add),
       ),
