@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'package:flutter/material.dart';
+
 import 'data_collection/circular_buffer.dart';
 import 'data_collection/ecg_wrapper.dart';
 
@@ -130,4 +132,17 @@ List<int> dataSeriesNormal(ECGWrapper storeWrapper) {
   List<int> result = storeWrapper.buffer().getData();
   storeWrapper.restoreCircularBufferParams();
   return result;
+}
+
+void showToast(BuildContext context, String text) {
+  final scaffold = ScaffoldMessenger.of(context);
+  scaffold.showSnackBar(
+    SnackBar(
+      backgroundColor: Colors.indigoAccent,
+      content: Text(text, style: const TextStyle(
+        fontSize: 12, fontStyle: FontStyle.italic, color: Colors.white70,)),
+      action: SnackBarAction(
+          label: 'CLOSE', onPressed: scaffold.hideCurrentSnackBar),
+    ),
+  );
 }

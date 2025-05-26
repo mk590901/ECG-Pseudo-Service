@@ -2,7 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../ui_blocks/app_block.dart';
 import '../ui_blocks/items_bloc.dart';
+import '../utils.dart';
 import 'card_view.dart';
 import 'control_panel.dart';
 
@@ -61,7 +63,12 @@ class HomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.read<ItemsBloc>().add(AddItemEvent());
+          if (context.read<AppBloc>().state.isRunning) {
+            context.read<ItemsBloc>().add(AddItemEvent());
+          }
+          else {
+            showToast(context, "Service isn't run");
+          }
         },
         child: const Icon(Icons.add),
       ),
