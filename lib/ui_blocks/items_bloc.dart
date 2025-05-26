@@ -1,5 +1,6 @@
 // --- Items BLoC (control elements list) ---
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uuid/uuid.dart';
 
 import 'item_model.dart';
 
@@ -26,9 +27,9 @@ class ItemsState {
 class ItemsBloc extends Bloc<ItemsEvent, ItemsState> {
   ItemsBloc() : super(ItemsState(items: [])) {
     on<AddItemEvent>((event, emit) {
-      final newItem = Item(
-        id: DateTime.now().toString(),
-        title: 'Item ${state.items.length + 1}',
+      String id = const Uuid().v4().toString();
+      final Item newItem = Item(
+        id: id, title: "ECG Diagram [${id.substring(0, 8)}]",
       );
       emit(state.copyWith(items: [...state.items, newItem]));
     });
