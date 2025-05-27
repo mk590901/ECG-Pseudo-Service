@@ -13,24 +13,41 @@ class ControlPanel extends StatelessWidget {
       builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  context.read<AppBloc>().add(ToggleRunningEvent());
-                },
-                child: Text(state.isRunning ? 'Stop' : 'Start'),
-              ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(state.isServer ? 'Server' : 'Client'),
-                  const SizedBox(width: 8),
-                  Switch(
-                    value: state.isServer,
-                    onChanged: (value) {
-                      context.read<AppBloc>().add(ToggleModeEvent());
+                  Text(
+                    state.isRunning
+                        ? 'Pseudo Service is Running'
+                        : 'Pseudo Service is Stopped',
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  //const Text('Count: 0'),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<AppBloc>().add(ToggleRunningEvent());
                     },
+                    child: Text(state.isRunning ? 'Stop' : 'Start'),
+                  ),
+                  Row(
+                    children: [
+                      Text(state.isServer ? 'Server' : 'Client'),
+                      const SizedBox(width: 8),
+                      Switch(
+                        value: state.isServer,
+                        onChanged: (value) {
+                          context.read<AppBloc>().add(ToggleModeEvent());
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),
