@@ -1,4 +1,5 @@
 // --- Items BLoC (control elements list) ---
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
 
@@ -8,10 +9,17 @@ abstract class ItemsEvent {}
 
 class AddItemEvent extends ItemsEvent {}
 
+// class RemoveItemEvent extends ItemsEvent {
+//   final String id;
+//
+//   RemoveItemEvent(this.id);
+// }
+
 class RemoveItemEvent extends ItemsEvent {
   final String id;
+  final DismissDirection direction;
 
-  RemoveItemEvent(this.id);
+  RemoveItemEvent(this.id, this.direction);
 }
 
 class ItemsState {
@@ -32,12 +40,19 @@ class ItemsBloc extends Bloc<ItemsEvent, ItemsState> {
         id: id, title: "ECG Diagram [${id.substring(0, 8)}]",
       );
       emit(state.copyWith(items: [...state.items, newItem]));
+      print('Add [$id] simulator');
     });
 
     on<RemoveItemEvent>((event, emit) {
+      //print('Item ${event.id} removed with direction: ${event.direction}');
       emit(state.copyWith(
         items: state.items.where((item) => item.id != event.id).toList(),
       ));
+
+      if (event.direction == DismissDirection.endToStart) {
+        print('Remove [${event.id}] simulator');
+      }
+
     });
   }
 }
