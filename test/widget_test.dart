@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:gui_model/main.dart';
-import 'package:gui_model/mock/serviceMock.dart';
+import 'package:gui_model/mock/service_mock.dart';
 
 void main() {
 
