@@ -46,6 +46,16 @@ class ServiceMock {
     // }
   }
 
+  SimulatorWrapper? get(String? id) {
+    SimulatorWrapper? result;
+    _lock.synchronized(() {
+      if (container.containsKey(id)) {
+        result = container[id];
+      }
+    });
+    return result;
+  }
+
   int size() {
     return container.length;
   }

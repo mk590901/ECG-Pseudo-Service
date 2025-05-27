@@ -13,7 +13,10 @@ class CustomCardView extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
+        leading: Icon(Icons.info_outline, color: Colors.lightBlue,),
         title: Text(item.title),
+        subtitle: Text(item.subtitle, style: const TextStyle(
+            fontStyle: FontStyle.italic)),
       ),
     );
   }

@@ -74,8 +74,8 @@ class HomePage extends StatelessWidget {
         onPressed: () {
           if (context.read<AppBloc>().state.isRunning) {
             context.read<ItemsBloc>().add(
-              CreateItemEvent((objectId) {
-                context.read<ItemsBloc>().add(AddItemEvent(objectId));
+              CreateItemEvent((objectId,series) {
+                context.read<ItemsBloc>().add(AddItemEvent(objectId, series));
               }),
             );
           }
