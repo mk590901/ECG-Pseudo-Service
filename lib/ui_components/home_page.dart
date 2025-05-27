@@ -73,7 +73,11 @@ class HomePage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (context.read<AppBloc>().state.isRunning) {
-            context.read<ItemsBloc>().add(AddItemEvent());
+            context.read<ItemsBloc>().add(
+              CreateItemEvent((objectId) {
+                context.read<ItemsBloc>().add(AddItemEvent(objectId));
+              }),
+            );
           }
           else {
             showToast(context, "Service isn't run");

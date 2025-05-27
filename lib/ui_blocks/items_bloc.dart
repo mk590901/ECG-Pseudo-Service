@@ -8,13 +8,20 @@ import 'item_model.dart';
 
 abstract class ItemsEvent {}
 
-class AddItemEvent extends ItemsEvent {}
 
-// class RemoveItemEvent extends ItemsEvent {
-//   final String id;
-//
-//   RemoveItemEvent(this.id);
-// }
+class CreateItemEvent extends ItemsEvent {
+  final Function(String) onObjectCreated;
+
+  CreateItemEvent(this.onObjectCreated);
+}
+
+class AddItemEvent extends ItemsEvent {
+  final String id;
+
+  AddItemEvent(this.id);
+}
+
+//class AddItemEvent extends ItemsEvent {}
 
 class RemoveItemEvent extends ItemsEvent {
   final String id;
@@ -35,18 +42,31 @@ class ItemsState {
 
 class ItemsBloc extends Bloc<ItemsEvent, ItemsState> {
   ItemsBloc() : super(ItemsState(items: [])) {
+
+    // on<AddItemEvent>((event, emit) {
+    //   String id = ServiceMock.instance()?.add()?? const Uuid().v4().toString();
+    //   final Item newItem = Item(
+    //     id: id, title: "ECG Diagram [${id.substring(0, 8)}]",
+    //   );
+    //   emit(state.copyWith(items: [...state.items, newItem]));
+    //   print('Add [$id] simulator -> # ${ServiceMock.instance()?.size()}');
+    // });
+
+
     on<AddItemEvent>((event, emit) {
-      //String id = const Uuid().v4().toString();
-      String id = ServiceMock.instance()?.add()?? const Uuid().v4().toString();
-      final Item newItem = Item(
-        id: id, title: "ECG Diagram [${id.substring(0, 8)}]",
+      final newItem = Item(id: event.id,
+        title: "ECG Diagram [${event.id.substring(0, 8)}]",
       );
       emit(state.copyWith(items: [...state.items, newItem]));
-      print('Add [$id] simulator -> # ${ServiceMock.instance()?.size()}');
+    });
+
+    on<CreateItemEvent>((event, emit) async {
+      String objectId = ServiceMock.instance()?.add()?? const Uuid().v4().toString();
+      event.onObjectCreated(objectId);
     });
 
     on<RemoveItemEvent>((event, emit) {
-      //print('Item ${event.id} removed with direction: ${event.direction}');
+
       emit(state.copyWith(
         items: state.items.where((item) => item.id != event.id).toList(),
       ));
