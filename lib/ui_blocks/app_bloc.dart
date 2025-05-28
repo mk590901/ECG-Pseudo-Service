@@ -1,34 +1,51 @@
 // --- App BLoC (for Start/Stop и Mode1/Mode2) ---
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+class DataPacket {
+  final String id;
+  final List<double> rawData;
+  DataPacket(this.id, this.rawData);
+}
+
 abstract class AppEvent {}
 
 class ToggleRunningEvent extends AppEvent {}
 
 class ToggleModeEvent extends AppEvent {}
 
+class UpdateDataEvent extends AppEvent {
+  final String id;
+  final List<double> rawData;
+  UpdateDataEvent(this.id, this.rawData);
+}
+
 class AppState {
   final bool isRunning;
   final bool isServer;
+  final DataPacket dataPacket;
 
-  AppState({
+  AppState( {
     required this.isRunning,
     required this.isServer,
+    required this.dataPacket
   });
 
   AppState copyWith({
     bool? isRunning,
     bool? isServer,
+    DataPacket? dataPacket,
   }) {
     return AppState(
       isRunning: isRunning ?? this.isRunning,
       isServer: isServer ?? this.isServer,
+      dataPacket: dataPacket ?? this.dataPacket,
     );
   }
 }
 
 class AppBloc extends Bloc<AppEvent, AppState> {
-  AppBloc() : super(AppState(isRunning: false, isServer: true)) {
+  AppBloc() : super(AppState(dataPacket: DataPacket('',[]), isRunning: false, isServer: true)) {
+
     on<ToggleRunningEvent>((event, emit) {
       emit(state.copyWith(isRunning: !state.isRunning));
     });
@@ -36,5 +53,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<ToggleModeEvent>((event, emit) {
       emit(state.copyWith(isServer: !state.isServer));
     });
+
+    on<UpdateDataEvent>((event, emit) {
+      emit(state.copyWith(dataPacket: DataPacket(event.id,event.rawData)));
+    });
+
   }
 }
