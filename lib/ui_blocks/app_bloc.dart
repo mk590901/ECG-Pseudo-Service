@@ -1,5 +1,6 @@
 // --- App BLoC (for Start/Stop и Mode1/Mode2) ---
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gui_model/mock/service_mock.dart';
 
 class DataPacket {
   final String id;
@@ -47,6 +48,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc() : super(AppState(dataPacket: DataPacket('',[]), isRunning: false, isServer: true)) {
 
     on<ToggleRunningEvent>((event, emit) {
+      if (state.isRunning) {
+        ServiceMock.instance()?.stop();
+      }
+      else {
+        ServiceMock.instance()?.start();
+      }
       emit(state.copyWith(isRunning: !state.isRunning));
     });
 
