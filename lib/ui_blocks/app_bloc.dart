@@ -52,7 +52,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ServiceMock.instance()?.stop();
       }
       else {
-        ServiceMock.instance()?.start();
+        ServiceMock.instance()?.start(this);
       }
       emit(state.copyWith(isRunning: !state.isRunning));
     });
@@ -62,6 +62,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
 
     on<UpdateDataEvent>((event, emit) {
+      print ('UpdateDataEvent [${event.id}]');
       emit(state.copyWith(dataPacket: DataPacket(event.id,event.rawData)));
     });
 

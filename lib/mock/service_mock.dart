@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:synchronized/synchronized.dart';
 
+import '../ui_blocks/app_bloc.dart';
 import 'simulator_wrapper.dart';
 
 class ServiceMock {
@@ -9,6 +10,8 @@ class ServiceMock {
 
   final Map<String,SimulatorWrapper> container = {};
   final Lock _lock = Lock();
+
+  late AppBloc? _bloc;
 
   static int PERIOD = 1000;
   final Duration _period = Duration(milliseconds: PERIOD);
@@ -34,7 +37,7 @@ class ServiceMock {
       });
 
       if (size() == 1) {
-        start();
+        start(_bloc);
       }
 
       return wrapper.id();
@@ -75,7 +78,10 @@ class ServiceMock {
     return container.length;
   }
 
-  void start() {
+  void start(AppBloc? bloc) {
+
+    _bloc = bloc;
+
     if (container.isEmpty) {
       return;
     }
@@ -87,6 +93,9 @@ class ServiceMock {
 
   void callbackFunction() {
     print ('------- ServiceMock.callbackFunction -------');
+    container.forEach((key, value) {
+      _bloc?.add(UpdateDataEvent(key, []));
+    });
   }
 
   void stop() {
