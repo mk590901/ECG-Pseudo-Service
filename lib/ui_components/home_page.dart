@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../ui_blocks/app_block.dart';
+import '../ui_blocks/app_bloc.dart';
 import '../ui_blocks/items_bloc.dart';
 import '../utils.dart';
 import 'card_view.dart';
