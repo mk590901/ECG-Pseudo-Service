@@ -42,6 +42,8 @@ class ItemsState {
 class ItemsBloc extends Bloc<ItemsEvent, ItemsState> {
   ItemsBloc() : super(ItemsState(items: [])) {
 
+    ServiceMock.instance()?.setItemsBloc(this);
+
     on<AddItemEvent>((event, emit) {
 
       final newItem = Item(id: event.id,

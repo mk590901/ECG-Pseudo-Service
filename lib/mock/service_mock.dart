@@ -1,8 +1,9 @@
 import 'dart:async';
-
 import 'package:synchronized/synchronized.dart';
 
 import '../ui_blocks/app_bloc.dart';
+import '../ui_blocks/item_model.dart';
+import '../ui_blocks/items_bloc.dart';
 import 'simulator_wrapper.dart';
 
 class ServiceMock {
@@ -12,6 +13,7 @@ class ServiceMock {
   final Lock _lock = Lock();
 
   late AppBloc? _appBloc;
+  late ItemsBloc? _itemsBloc;
 
   static int PERIOD = 1000;
   final Duration _period = Duration(milliseconds: PERIOD);
@@ -87,6 +89,10 @@ class ServiceMock {
     return container.length;
   }
 
+  void setItemsBloc(ItemsBloc? itemsBloc) {
+    _itemsBloc = itemsBloc;
+  }
+
   void start(AppBloc? bloc) {
 
     _appBloc = bloc;
@@ -103,6 +109,7 @@ class ServiceMock {
   void callbackFunction() {
     print ('------- ServiceMock.callbackFunction -------');
     container.forEach((key, value) {
+      createGuiItemIfNeed(key);
       _appBloc?.add(UpdateDataEvent(value.presence(), key, []));
     });
   }
@@ -115,6 +122,48 @@ class ServiceMock {
     _timer = null;
     print ('------- callbackFunction.stop -------');
 
+  }
+
+  void createGuiItemIfNeed(String key) {
+    if (_itemsBloc == null) {
+      return;
+    }
+    if (containsItemsList(key)) {
+      return;
+    }
+    SimulatorWrapper? wrapper = get(key);
+    if (wrapper == null) {
+      return;
+    }
+    wrapper.setItemPresence(true);
+    _itemsBloc?.add(AddItemEvent(key, wrapper.length()));
+  }
+
+  bool containsItemsList(String key) {
+    bool result = false;
+
+    if (_itemsBloc == null) {
+      return result;
+    }
+
+    List<Item>? items = _itemsBloc?.state.items;
+    if (items == null) {
+      return result;
+    }
+
+    int size = items.length;
+    if (size ==  0) {
+      return result;
+    }
+
+    for (int i = 0; i < size; i++) {
+      Item item = items[i];
+      if (item.id == key) {
+        result = true;
+        break;
+      }
+    }
+    return result;
   }
 
 }
