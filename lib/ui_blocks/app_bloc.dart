@@ -48,12 +48,14 @@ class AppState {
 class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc() : super(AppState(dataPacket: DataPacket('',[]), isRunning: false, isServer: true)) {
 
+    ServiceMock.instance()?.setAppBloc(this);
+
     on<ToggleRunningEvent>((event, emit) {
       if (state.isRunning) {
         ServiceMock.instance()?.stop();
       }
       else {
-        ServiceMock.instance()?.start(this);
+        ServiceMock.instance()?.start();
       }
       emit(state.copyWith(isRunning: !state.isRunning));
     });

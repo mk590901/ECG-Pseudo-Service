@@ -39,7 +39,7 @@ class ServiceMock {
       });
 
       if (size() == 1) {
-        start(_appBloc);
+        start();
       }
 
       return wrapper.id();
@@ -61,9 +61,6 @@ class ServiceMock {
       stop();
     }
 
-    // if (container.containsKey(id)) {
-    //   container.remove(id);
-    // }
   }
 
   void markPresence(String? id, bool presence) {
@@ -93,9 +90,11 @@ class ServiceMock {
     _itemsBloc = itemsBloc;
   }
 
-  void start(AppBloc? bloc) {
+  void setAppBloc(AppBloc? appBloc) {
+    _appBloc = appBloc;
+  }
 
-    _appBloc = bloc;
+  void start() {
 
     if (container.isEmpty) {
       return;
@@ -122,13 +121,15 @@ class ServiceMock {
     _timer = null;
     print ('------- callbackFunction.stop -------');
 
+    // Maybe remove content of List<Item>
+
   }
 
   void createGuiItemIfNeed(String key) {
     if (_itemsBloc == null) {
       return;
     }
-    if (containsItemsList(key)) {
+    if (itemsListContains(key)) {
       return;
     }
     SimulatorWrapper? wrapper = get(key);
@@ -139,7 +140,7 @@ class ServiceMock {
     _itemsBloc?.add(AddItemEvent(key, wrapper.length()));
   }
 
-  bool containsItemsList(String key) {
+  bool itemsListContains(String key) {
     bool result = false;
 
     if (_itemsBloc == null) {
