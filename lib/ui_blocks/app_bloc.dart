@@ -16,8 +16,9 @@ class ToggleModeEvent extends AppEvent {}
 
 class UpdateDataEvent extends AppEvent {
   final String id;
+  final bool presence;
   final List<double> rawData;
-  UpdateDataEvent(this.id, this.rawData);
+  UpdateDataEvent(this.presence, this.id, this.rawData);
 }
 
 class AppState {
@@ -62,7 +63,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
 
     on<UpdateDataEvent>((event, emit) {
-      print ('UpdateDataEvent [${event.id}]');
+      print ('UpdateDataEvent [${event.presence}] [${event.id}]');
       emit(state.copyWith(dataPacket: DataPacket(event.id,event.rawData)));
     });
 

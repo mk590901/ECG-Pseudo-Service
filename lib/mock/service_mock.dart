@@ -11,7 +11,7 @@ class ServiceMock {
   final Map<String,SimulatorWrapper> container = {};
   final Lock _lock = Lock();
 
-  late AppBloc? _bloc;
+  late AppBloc? _appBloc;
 
   static int PERIOD = 1000;
   final Duration _period = Duration(milliseconds: PERIOD);
@@ -37,7 +37,7 @@ class ServiceMock {
       });
 
       if (size() == 1) {
-        start(_bloc);
+        start(_appBloc);
       }
 
       return wrapper.id();
@@ -64,6 +64,15 @@ class ServiceMock {
     // }
   }
 
+  void markPresence(String? id, bool presence) {
+    _lock.synchronized(() {
+      if (container.containsKey(id)) {
+        container[id]?.setItemPresence(false);
+      }
+    });
+
+  }
+
   SimulatorWrapper? get(String? id) {
     SimulatorWrapper? result;
     _lock.synchronized(() {
@@ -80,7 +89,7 @@ class ServiceMock {
 
   void start(AppBloc? bloc) {
 
-    _bloc = bloc;
+    _appBloc = bloc;
 
     if (container.isEmpty) {
       return;
@@ -94,7 +103,7 @@ class ServiceMock {
   void callbackFunction() {
     print ('------- ServiceMock.callbackFunction -------');
     container.forEach((key, value) {
-      _bloc?.add(UpdateDataEvent(key, []));
+      _appBloc?.add(UpdateDataEvent(value.presence(), key, []));
     });
   }
 

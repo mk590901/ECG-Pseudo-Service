@@ -22,8 +22,6 @@ class AddItemEvent extends ItemsEvent {
   AddItemEvent(this.id, this.length);
 }
 
-//class AddItemEvent extends ItemsEvent {}
-
 class RemoveItemEvent extends ItemsEvent {
   final String id;
   final DismissDirection direction;
@@ -68,6 +66,9 @@ class ItemsBloc extends Bloc<ItemsEvent, ItemsState> {
       if (event.direction == DismissDirection.endToStart) {
         ServiceMock.instance()?.remove(event.id);
         print('Remove [${event.id}] simulator -> # ${ServiceMock.instance()?.size()}');
+      }
+      else {
+        ServiceMock.instance()?.markPresence(event.id, false);
       }
 
     });
