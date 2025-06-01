@@ -61,7 +61,7 @@ class HomePage extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 16),
                         child: const Icon(Icons.delete_forever, color: Colors.white),
                       ),
-                      child: CustomCardView(item: item),
+                      child: CardView(item: item),
                     );
                   },
                 );

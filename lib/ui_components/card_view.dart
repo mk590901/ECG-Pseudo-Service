@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 import '../ui_blocks/item_model.dart';
 
-class CustomCardView extends StatelessWidget {
+class CardView extends StatelessWidget {
   final Item item;
 
-  const CustomCardView({super.key, required this.item});
+  const CardView({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
