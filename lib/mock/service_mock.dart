@@ -138,6 +138,14 @@ class ServiceMock {
 
   }
 
+  void dispose(String key) {
+    print ('- ServiceMock.dispose($key) -');
+    Item? item = getItem(key);
+    item?.graphWidget.stop();
+    print ('+ ServiceMock.dispose($key) +');
+
+  }
+
   void createGuiItemIfNeed(String key) {
     if (_itemsBloc == null) {
       return;
@@ -180,5 +188,31 @@ class ServiceMock {
     return result;
   }
 
+  Item? getItem(String key) {
+    Item? result;
+
+    if (_itemsBloc == null) {
+      return result;
+    }
+
+    List<Item>? items = _itemsBloc?.state.items;
+    if (items == null) {
+      return result;
+    }
+
+    int size = items.length;
+    if (size ==  0) {
+      return result;
+    }
+
+    for (int i = 0; i < size; i++) {
+      Item item = items[i];
+      if (item.id == key) {
+        result = item;
+        break;
+      }
+    }
+    return result;
+  }
 
 }

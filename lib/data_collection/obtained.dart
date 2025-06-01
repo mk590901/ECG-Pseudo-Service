@@ -27,6 +27,8 @@ class Obtained {
   void set(int cycles, BuildContext context) {
     _cycles = cycles;
     _context = context;
+
+    //print ();
   }
 
   void start(final String uuid) {
@@ -46,6 +48,9 @@ class Obtained {
   }
 
   void _callbackFunction(String uuid) {
+    if (!_context.mounted) {
+      return;
+    }
     redraw(_context, uuid, _counter++);
     if (_counter > _cycles) {  //  _counter >= _cycles
       _counter = 1;

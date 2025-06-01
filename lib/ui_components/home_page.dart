@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../mock/service_mock.dart';
 import '../ui_blocks/app_bloc.dart';
 import '../ui_blocks/items_bloc.dart';
 import '../utils.dart';
@@ -45,6 +46,7 @@ class HomePage extends StatelessWidget {
                       key: Key(item.id),
                       direction: DismissDirection.horizontal,
                       onDismissed: (direction) {
+                        ServiceMock.instance()?.dispose(item.id);
                         context.read<ItemsBloc>().add(RemoveItemEvent(item.id, item.graphWidget, direction));
                       },
                       //  Swipe left->right
