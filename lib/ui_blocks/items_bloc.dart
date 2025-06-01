@@ -1,10 +1,12 @@
 // --- Items BLoC (control elements list) ---
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gui_model/widget/graph_widget.dart';
 import 'package:uuid/uuid.dart';
 
 import '../mock/service_mock.dart';
 import '../mock/simulator_wrapper.dart';
+import '../widget/graph_mode.dart';
 import 'item_model.dart';
 
 abstract class ItemsEvent {}
@@ -18,8 +20,15 @@ class CreateItemEvent extends ItemsEvent {
 class AddItemEvent extends ItemsEvent {
   final String id;
   final int? length;
+  late GraphWidget graphWidget;
 
-  AddItemEvent(this.id, this.length);
+  AddItemEvent(this.id, this.length,) {
+    graphWidget = GraphWidget(
+        samplesNumber: length?? 128,
+        width: 340,
+        height: 100,
+        mode: GraphMode.flowing,);
+  }
 }
 
 class RemoveItemEvent extends ItemsEvent {
@@ -48,7 +57,8 @@ class ItemsBloc extends Bloc<ItemsEvent, ItemsState> {
 
       final newItem = Item(id: event.id,
         title: "ECG Diagram [${event.id.substring(0, 8)}]",
-        subtitle: "Sample rate is ${event.length} points/s"
+        subtitle: "Sample rate is ${event.length} points/s",
+        graphWidget: event.graphWidget,
       );
       emit(state.copyWith(items: [...state.items, newItem]));
     });
