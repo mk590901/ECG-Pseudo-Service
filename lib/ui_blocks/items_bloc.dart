@@ -1,12 +1,12 @@
 // --- Items BLoC (control elements list) ---
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gui_model/widget/graph_widget.dart';
 import 'package:uuid/uuid.dart';
 
 import '../mock/service_mock.dart';
 import '../mock/simulator_wrapper.dart';
 import '../widget/graph_mode.dart';
+import '../widget/graph_widget.dart';
 import 'item_model.dart';
 
 abstract class ItemsEvent {}
@@ -24,18 +24,24 @@ class AddItemEvent extends ItemsEvent {
 
   AddItemEvent(this.id, this.length,) {
     graphWidget = GraphWidget(
+        uuid: id,
         samplesNumber: length?? 128,
         width: 340,
         height: 100,
         mode: GraphMode.flowing,);
+    if (!graphWidget.isStarted()) {
+      graphWidget.start();
+    }
+
   }
 }
 
 class RemoveItemEvent extends ItemsEvent {
   final String id;
   final DismissDirection direction;
+  final GraphWidget graphWidget;
 
-  RemoveItemEvent(this.id, this.direction);
+  RemoveItemEvent(this.id, this.graphWidget, this.direction);
 }
 
 class ItemsState {
@@ -70,6 +76,8 @@ class ItemsBloc extends Bloc<ItemsEvent, ItemsState> {
     });
 
     on<RemoveItemEvent>((event, emit) {
+
+      //@event.graphWidget.stop();
 
       emit(state.copyWith(
         items: state.items.where((item) => item.id != event.id).toList(),

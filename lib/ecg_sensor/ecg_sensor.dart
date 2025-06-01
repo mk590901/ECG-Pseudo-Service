@@ -1,16 +1,19 @@
 import 'dart:async';
 
-import '../data_collection/data_holder.dart';
+//import '../data_collection/data_holder.dart';
 import '../data_collection/data_exchanger.dart';
+import '../mock/service_mock.dart';
 
 class ECGSensor {
   static int PERIOD = 1000;
+
+  final String id;
   final DataExchanger exchanger;
   final Duration _period = Duration(milliseconds: PERIOD);
 
   late Timer? _timer;
 
-  ECGSensor (this.exchanger) {
+  ECGSensor (this.id, this.exchanger) {
     _timer = null;
 
     print ('-- Constructor ECGSensor --');
@@ -32,8 +35,9 @@ class ECGSensor {
   }
 
   void _callbackFunction() {
-    List<double> rowData = DataHolder.instance()?.getData()?? [];
-    exchanger.put(rowData);
+    //List<double> rowData = DataHolder.instance()?.getData()?? [];
+    List<double> rawData = ServiceMock.instance()?.getData(id)?? [];//[];
+    exchanger.put(rawData);
   }
 
   void outFun(List<double> list) {

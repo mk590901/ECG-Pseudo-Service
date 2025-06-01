@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'data_collection/data_holder.dart';
+//import 'data_collection/data_holder.dart';
 import 'mock/service_mock.dart';
 import 'ui_blocks/app_bloc.dart';
 import 'ui_blocks/items_bloc.dart';
 import 'ui_components/home_page.dart';
 
 void main() {
-  DataHolder.initInstance();
+  //DataHolder.initInstance();
   ServiceMock.initInstance();
   runApp(const FrontendApp());
 }

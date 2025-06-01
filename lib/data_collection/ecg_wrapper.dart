@@ -10,6 +10,8 @@ class ECGWrapper {
   final int _drawSeriesLength;  //  Drawable data size per second
   final int _seriesNumber;      //  Data buffer size
   final int _seriesLength;      //  Number of displayed drawable data pieces
+  final String _id;
+
   late GraphMode _mode;  //  Mode
 
   late  CircularBuffer<int> buffer_;
@@ -30,9 +32,9 @@ class ECGWrapper {
 
   late List<int> rowData;
 
-  ECGWrapper(this._seriesLength, this._seriesNumber, this._drawSeriesLength, this._mode) {
+  ECGWrapper(this._id, this._seriesLength, this._seriesNumber, this._drawSeriesLength, this._mode) {
     exchanger = DataExchanger(_seriesLength*2, outFun);
-    sensor = ECGSensor(exchanger);
+    sensor = ECGSensor(_id, exchanger);
     rowData = List<int>.filled(_seriesLength, 0);
     buffer_ = CircularBuffer<int>(_seriesLength*_seriesNumber);
   }

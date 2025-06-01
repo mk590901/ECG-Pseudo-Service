@@ -82,6 +82,17 @@ class ServiceMock {
     return result;
   }
 
+  List<double> getData(String id) {
+    List<double> result = [];
+    SimulatorWrapper? wrapper = get(id);
+    if (wrapper == null) {
+      return result;
+    }
+    result = wrapper.getData();
+
+    return result;
+  }
+
   int size() {
     return container.length;
   }
@@ -109,6 +120,8 @@ class ServiceMock {
     print ('------- ServiceMock.callbackFunction -------');
     container.forEach((key, value) {
       createGuiItemIfNeed(key);
+      List<double> rawData = value.generateRawData();
+      value.putData(rawData);
       _appBloc?.add(UpdateDataEvent(value.presence(), key, []));
     });
   }
@@ -166,5 +179,6 @@ class ServiceMock {
     }
     return result;
   }
+
 
 }

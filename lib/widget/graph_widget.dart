@@ -16,7 +16,8 @@ class GraphWidget extends StatelessWidget {
   final double width;
   final double height;
   final GraphMode mode;
-  final String uuid = const Uuid().v4().toString();
+  final String uuid;
+  //final String uuid = const Uuid().v4().toString();
 
   late ECGWrapper storeWrapper;
 
@@ -24,6 +25,7 @@ class GraphWidget extends StatelessWidget {
 
   GraphWidget(
       {super.key,
+      required this.uuid,
       required this.samplesNumber,
       required this.width,
       required this.height,
@@ -31,7 +33,7 @@ class GraphWidget extends StatelessWidget {
       }) {
     int pointsToDraw =
         (samplesNumber.toDouble() / (PERIOD.toDouble() / FREQ.toDouble())).toInt() + 1;
-    storeWrapper = ECGWrapper(samplesNumber, 5, pointsToDraw, mode);
+    storeWrapper = ECGWrapper(uuid, samplesNumber, 5, pointsToDraw, mode);
   }
 
   bool isStarted() {

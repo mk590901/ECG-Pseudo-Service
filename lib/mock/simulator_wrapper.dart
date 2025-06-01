@@ -9,6 +9,8 @@ class SimulatorWrapper {
   final Random random = Random();
   final int _seriesLength = getSeriesLength();
 
+  late List<double> rawData = [];
+
   late final EcgSimulator _ecgSimulator = EcgSimulator(_seriesLength);
   late bool _itemPresence = true;
 
@@ -24,12 +26,21 @@ class SimulatorWrapper {
     return _seriesLength;
   }
 
-  List<double> rowData() {
+  List<double> generateRawData() {
     return _ecgSimulator.generateECGData();
   }
 
   void setItemPresence(bool presence) {
     _itemPresence = presence;
   }
+
+  List<double> getData() {
+    return rawData;
+  }
+
+  void putData(List<double> data) {
+    rawData = data;
+  }
+
 
 }

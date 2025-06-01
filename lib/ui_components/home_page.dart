@@ -45,7 +45,7 @@ class HomePage extends StatelessWidget {
                       key: Key(item.id),
                       direction: DismissDirection.horizontal,
                       onDismissed: (direction) {
-                        context.read<ItemsBloc>().add(RemoveItemEvent(item.id, direction));
+                        context.read<ItemsBloc>().add(RemoveItemEvent(item.id, item.graphWidget, direction));
                       },
                       //  Swipe left->right
                       background: Container(
