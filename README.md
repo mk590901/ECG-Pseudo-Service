@@ -11,7 +11,8 @@ It's quite difficult to write everything right at once. Therefore, the process i
 2. Service simulation - the current project. Creation of data structures that allow simulating the receipt and display of ECG signals from multiple clients. In this case, the __service__ is not implemented. Pure imitation.
 3. From __service simulation to a real __service__. 3 = (1 & 2)
 4. Development Pack/Unpack ECG Signal procedures
-5. 5 = (3 & 4)
+5. Add __MQTT__ client (like https://github.com/mk590901/mqtt_sink_agent)
+6. 6 = (3 & 4 & 5)
 
 ## Application Features
 
