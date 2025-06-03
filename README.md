@@ -13,13 +13,13 @@ It's quite difficult to write everything right at once. Therefore, the process i
 4.Development Pack/Unpack ECG Signal procedures
 5. 5 = (3 & 4)
 
-## ## Application Features
+## Application Features
 
-* __Action__ button adds __ECG pseudo client__ to app. With the help of swape client can be deleted. There are two types of deletion:
-> GUI image of client is deleted: swipe from left to right. In this case, the pseudo client continues to generate a signal and automatically returns to the list.
-> Brutal pseudo client delete from the application: swipe from right to left.
-*__Stop button__ deletes GUI images of clients.
-> 
+> __Action__ button adds __ECG pseudo client__ to app. With the help of swape client can be deleted. There are two types of deletion:
+* GUI image of client is deleted: swipe from left to right. In this case, the pseudo client continues to generate a signal and automatically returns to the list.
+* Brutal pseudo client delete from the application: swipe from right to left.
+>__Stop button__ deletes GUI images of clients.
+ 
 ## Movie
 
 https://github.com/user-attachments/assets/66a736a1-7cc2-4909-b9bc-ed507d772361
