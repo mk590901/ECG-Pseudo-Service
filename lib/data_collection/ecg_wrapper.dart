@@ -30,12 +30,12 @@ class ECGWrapper {
   late int readIndex;
   late int size;
 
-  late List<int> rowData;
+  late List<int> rawData;
 
   ECGWrapper(this._id, this._seriesLength, this._seriesNumber, this._drawSeriesLength, this._mode) {
     exchanger = DataExchanger(_seriesLength*2, outFun);
     sensor = ECGSensor(_id, exchanger);
-    rowData = List<int>.filled(_seriesLength, 0);
+    rawData = List<int>.filled(_seriesLength, 0);
     buffer_ = CircularBuffer<int>(_seriesLength*_seriesNumber);
   }
 
@@ -44,7 +44,7 @@ class ECGWrapper {
     for (int i = 0; i < list.length; i++) {
       double doubleValue = list[i];
       int intValue = (doubleValue * 1000).toInt();
-      rowData[i] = intValue;
+      rawData[i] = intValue;
     }
   }
 
@@ -53,7 +53,7 @@ class ECGWrapper {
   }
 
   int drawingFrequency() {
-    return ((rowData.length).toDouble()/_drawSeriesLength).toInt();
+    return ((rawData.length).toDouble()/_drawSeriesLength).toInt();
   }
 
   int seriesLength() {
@@ -77,17 +77,17 @@ class ECGWrapper {
       exchanger.get(_seriesLength); //  >>>>
     }
 
-    List<int> dataExtracted = extractRangeData(rowData, (counter-1)*seriesSize, seriesSize);
-    buffer_.writeRow(dataExtracted);
+    List<int> dataExtracted = extractRangeData(rawData, (counter-1)*seriesSize, seriesSize);
+    buffer_.writeRaw(dataExtracted);
   }
 
   double getMin() {
     int minV = 0;
-    List<int?> rowData = buffer_.buffer();
+    List<int?> rawData = buffer_.buffer();
     if (buffer_.size() == buffer_.capacity()-1) {
       minV = getMinForFullBuffer(buffer_);
       for (int i = 1; i < buffer_.capacity(); i++) {
-        int? value = rowData[i];
+        int? value = rawData[i];
         if (value != null) {
           if (value < minV) {
             minV = value;
@@ -96,9 +96,9 @@ class ECGWrapper {
       }
     }
     else {
-      minV = rowData[0]?? 0;
+      minV = rawData[0]?? 0;
       for (int i = 1; i < buffer_.size(); i++) {
-        int? value = rowData[i];
+        int? value = rawData[i];
         if (value != null) {
           if (value < minV) {
             minV = value;
@@ -111,11 +111,11 @@ class ECGWrapper {
 
   double getMax() {
     int maxV = 0;
-    List<int?> rowData = buffer_.buffer();
+    List<int?> rawData = buffer_.buffer();
     if (buffer_.size() == buffer_.capacity()-1) {
       maxV = getMinForFullBuffer(buffer_);
       for (int i = 1; i < buffer_.capacity(); i++) {
-        int? value = rowData[i];
+        int? value = rawData[i];
         if (value != null) {
           if (value > maxV) {
             maxV = value;
@@ -124,9 +124,9 @@ class ECGWrapper {
       }
     }
     else {
-      maxV = rowData[0]?? 0;
+      maxV = rawData[0]?? 0;
       for (int i = 1; i < buffer_.size(); i++) {
-        int? value = rowData[i];
+        int? value = rawData[i];
         if (value != null) {
           if (value > maxV) {
             maxV = value;

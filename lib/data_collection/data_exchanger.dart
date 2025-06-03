@@ -23,15 +23,15 @@ class DataExchanger {
     return buffer_;
   }
 
-  void write(List<double> rowData) {
-    if (rowData.isEmpty) {
+  void write(List<double> rawData) {
+    if (rawData.isEmpty) {
       return;
     }
-    buffer_.writeRow(rowData);
+    buffer_.writeRaw(rawData);
   }
 
-  void put(List<double> rowData) {
-    _dataQueue.add(rowData);
+  void put(List<double> rawData) {
+    _dataQueue.add(rawData);
     handler.sendMessage(putData);
   }
 
@@ -44,7 +44,7 @@ class DataExchanger {
     if (orderedSize <= 0) {
       return [];
     }
-    return buffer_.readRow(orderedSize);
+    return buffer_.readRaw(orderedSize);
   }
 
   void dispose() {

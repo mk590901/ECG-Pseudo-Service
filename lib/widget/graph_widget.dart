@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uuid/uuid.dart';
 import '../data_collection/obtained.dart';
 import '../states/drawing_state.dart';
 import '../data_collection/ecg_wrapper.dart';
@@ -17,9 +16,8 @@ class GraphWidget extends StatelessWidget {
   final double height;
   final GraphMode mode;
   final String uuid;
-  //final String uuid = const Uuid().v4().toString();
 
-  late ECGWrapper storeWrapper;
+  late ECGWrapper ecgWrapper;
 
   final Obtained obtain = Obtained.part(const Duration(milliseconds: FREQ));
 
@@ -33,7 +31,7 @@ class GraphWidget extends StatelessWidget {
       }) {
     int pointsToDraw =
         (samplesNumber.toDouble() / (PERIOD.toDouble() / FREQ.toDouble())).toInt() + 1;
-    storeWrapper = ECGWrapper(uuid, samplesNumber, 5, pointsToDraw, mode);
+    ecgWrapper = ECGWrapper(uuid, samplesNumber, 5, pointsToDraw, mode);
   }
 
   bool isStarted() {
@@ -41,21 +39,21 @@ class GraphWidget extends StatelessWidget {
   }
 
   void start() {
-    storeWrapper.start();
+    ecgWrapper.start();
     obtain.start(uuid);
   }
 
   void stop() {
     obtain.stop(uuid);
-    storeWrapper.stop();
+    ecgWrapper.stop();
   }
 
   void onChangeMode() {
-    storeWrapper.setMode(isFlowing() ? GraphMode.overlay : GraphMode.flowing);
+    ecgWrapper.setMode(isFlowing() ? GraphMode.overlay : GraphMode.flowing);
   }
 
   bool isFlowing() {
-    return storeWrapper.mode() == GraphMode.flowing;
+    return ecgWrapper.mode() == GraphMode.flowing;
   }
 
   @override
@@ -68,8 +66,8 @@ class GraphWidget extends StatelessWidget {
         },
         child:
             BlocBuilder<DrawingBloc, DrawingState>(builder: (context, state) {
-          obtain.set(storeWrapper.drawingFrequency(), context);
-          storeWrapper.updateBuffer(state.counter());
+          obtain.set(ecgWrapper.drawingFrequency(), context);
+          ecgWrapper.updateBuffer(state.counter());
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -77,7 +75,7 @@ class GraphWidget extends StatelessWidget {
                 width: width,
                 height: height,
                 child: CustomPaint(
-                  painter: PathPainter.graph(state.counter(), storeWrapper),
+                  painter: PathPainter.graph(state.counter(), ecgWrapper),
                 ),
               ),
             ],
@@ -89,6 +87,6 @@ class GraphWidget extends StatelessWidget {
 
   void dispose() {
     obtain.stop(uuid);
-    storeWrapper.stop();
+    ecgWrapper.stop();
   }
 }

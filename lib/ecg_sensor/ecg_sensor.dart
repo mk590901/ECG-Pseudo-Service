@@ -35,7 +35,6 @@ class ECGSensor {
   }
 
   void _callbackFunction() {
-    //List<double> rowData = DataHolder.instance()?.getData()?? [];
     List<double> rawData = ServiceMock.instance()?.getData(id)?? [];//[];
     exchanger.put(rawData);
   }

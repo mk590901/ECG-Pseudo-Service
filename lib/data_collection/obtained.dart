@@ -41,14 +41,26 @@ class Obtained {
 
   }
 
+  bool isContextInitialized(BuildContext context) {
+    try {
+      var value = context;
+      return true; // Initialized if no error
+    } catch (e) {
+      return false; // Not initialized
+    }
+  }
+
   void redraw(BuildContext context, String uuid, int counter) {
+    if (!isContextInitialized(context) || !_context.mounted) {
+      return;
+    }
     Event? event = Drawing();
     event.setData(Pair(uuid,counter));
     context.read<DrawingBloc>().add(event);
   }
 
   void _callbackFunction(String uuid) {
-    if (!_context.mounted) {
+    if (!isContextInitialized(_context) || !_context.mounted) {
       return;
     }
     redraw(_context, uuid, _counter++);

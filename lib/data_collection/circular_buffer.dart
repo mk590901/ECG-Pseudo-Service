@@ -22,7 +22,7 @@ class CircularBuffer<T> {
     return _buffer;
   }
 
-  Future<void> writeRowAsync(List<T> list) async {
+  Future<void> writeRawAsync(List<T> list) async {
     await _lock.synchronized(() async {
       for (var element in list) {
         write(element);
@@ -30,7 +30,7 @@ class CircularBuffer<T> {
     });
   }
 
-  void writeRow(List<T> list) {
+  void writeRaw(List<T> list) {
     //print ('Circular.writeRow->$_writeIndex [${list.length}]');
     if (list.isEmpty) {
       return;
@@ -52,7 +52,7 @@ class CircularBuffer<T> {
     }
   }
 
-  Future<List<T>> readRowAsync(int orderedSize) async {
+  Future<List<T>> readRawAsync(int orderedSize) async {
     return await _lock.synchronized(() async {
       List<T> result = <T>[];
       int cycles = (orderedSize > size()) ? size() : orderedSize;
@@ -83,7 +83,7 @@ class CircularBuffer<T> {
     return value;
   }
 
-  List<T> readRow(int orderedSize) {
+  List<T> readRaw(int orderedSize) {
     List<T> result = <T>[];
     int cycles = (orderedSize > size()) ? size() : orderedSize;
     for (int i = 0; i < cycles; i++) {

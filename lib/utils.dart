@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'data_collection/circular_buffer.dart';
 import 'data_collection/ecg_wrapper.dart';
 
-List<int> extractRangeData(final List<int> rowData, final int start, final int number) {
+List<int> extractRangeData(final List<int> rawData, final int start, final int number) {
   List<int> result = <int>[];
 
-  if (rowData.isEmpty) {
+  if (rawData.isEmpty) {
     return result;
   }
 
@@ -19,24 +19,24 @@ List<int> extractRangeData(final List<int> rowData, final int start, final int n
     return result;
   }
 
-  int rowLength = rowData.length;
+  int rawLength = rawData.length;
 
-  if (start >= rowLength) {
+  if (start >= rawLength) {
     return result;
   }
 
-  if (rowData.length <= start + number) {
-    result = rowData.sublist(start, rowLength);
+  if (rawData.length <= start + number) {
+    result = rawData.sublist(start, rawLength);
     return result;
   }
   // result = rowData.sublist(start, start + number);
   // print ('[$start,${start + number}]');
   int fin = start + number;
-  if ((fin + number) > rowLength) {
-    fin += rowLength - fin;
+  if ((fin + number) > rawLength) {
+    fin += rawLength - fin;
   }
 
-  result = rowData.sublist(start, fin);
+  result = rawData.sublist(start, fin);
   //print ('[$start,$fin]');
 
   return result;
@@ -52,32 +52,32 @@ int getRandomValue(final int min, final int max) {
   return Random().nextInt(max - min + 1) + min;
 }
 
-double getMin(List<int> rowData, int rowSize) {
-  int min = rowData[0];
-  for (int i = 1; i < rowSize; i++) {
-    if (rowData[i] < min) {
-      min = rowData[i];
+double getMin(List<int> rawData, int rawSize) {
+  int min = rawData[0];
+  for (int i = 1; i < rawSize; i++) {
+    if (rawData[i] < min) {
+      min = rawData[i];
     }
   }
   return min.toDouble();
 }
 
-double getMax(List<int> rowData, int rowSize) {
-  int max = rowData[0];
-  for (int i = 1; i < rowSize; i++) {
-    if (rowData[i] > max) {
-      max = rowData[i];
+double getMax(List<int> rawData, int rawSize) {
+  int max = rawData[0];
+  for (int i = 1; i < rawSize; i++) {
+    if (rawData[i] > max) {
+      max = rawData[i];
     }
   }
   return max.toDouble();
 }
 
 double getMinB(final CircularBuffer<int> buffer) {
-  List<int?> rowData = buffer.buffer();
-  int? min = rowData[0];
+  List<int?> rawData = buffer.buffer();
+  int? min = rawData[0];
   int minV = (min == null) ? 0 : min;
   for (int i = 1; i < buffer.capacity(); i++) {
-    int? value = rowData[i];
+    int? value = rawData[i];
     int valueV = (value == null) ? 0 : value;
     if (valueV < minV) {
       minV = valueV;
@@ -87,11 +87,11 @@ double getMinB(final CircularBuffer<int> buffer) {
 }
 
 double getMaxB(final CircularBuffer<int> buffer) {
-  List<int?> rowData = buffer.buffer();
-  int? max = rowData[0];
+  List<int?> rawData = buffer.buffer();
+  int? max = rawData[0];
   int maxV = (max == null) ? 0 : max;
   for (int i = 1; i < buffer.capacity(); i++) {
-    int? value = rowData[i];
+    int? value = rawData[i];
     int valueV = (value == null) ? 0 : value;
     if (valueV > maxV) {
       maxV = valueV;
@@ -102,12 +102,12 @@ double getMaxB(final CircularBuffer<int> buffer) {
 
 int getMinForFullBuffer(final CircularBuffer<int> buffer) {
   int result = 0;
-  List<int?> rowData = buffer.buffer();
-  if (rowData[0] == null) {
-    result = rowData[1]!;
+  List<int?> rawData = buffer.buffer();
+  if (rawData[0] == null) {
+    result = rawData[1]!;
   }
   else {
-    result = rowData[0]!;
+    result = rawData[0]!;
   }
   return result;
 }
