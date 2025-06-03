@@ -32,6 +32,18 @@ class GraphWidget extends StatelessWidget {
     int pointsToDraw =
         (samplesNumber.toDouble() / (PERIOD.toDouble() / FREQ.toDouble())).toInt() + 1;
     ecgWrapper = ECGWrapper(uuid, samplesNumber, 5, pointsToDraw, mode);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      postBuildAction();
+    });
+
+  }
+
+  void postBuildAction() {
+    print('GraphWidget has been built!');
+    if (!isStarted()) {
+      start();
+    }
   }
 
   bool isStarted() {

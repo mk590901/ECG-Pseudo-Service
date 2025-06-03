@@ -29,9 +29,10 @@ class AddItemEvent extends ItemsEvent {
         width: 340,
         height: 100,
         mode: GraphMode.flowing,);
-    if (!graphWidget.isStarted()) {
-      graphWidget.start();
-    }
+
+    // if (!graphWidget.isStarted()) {
+    //   graphWidget.start();
+    // }
 
   }
 }
@@ -43,6 +44,8 @@ class RemoveItemEvent extends ItemsEvent {
 
   RemoveItemEvent(this.id, this.graphWidget, this.direction);
 }
+
+class ClearItemsEvent extends ItemsEvent {}
 
 class ItemsState {
   final List<Item> items;
@@ -92,5 +95,10 @@ class ItemsBloc extends Bloc<ItemsEvent, ItemsState> {
       }
 
     });
+
+    on<ClearItemsEvent>((event, emit) {
+      emit(state.copyWith(items: []));
+    });
+
   }
 }

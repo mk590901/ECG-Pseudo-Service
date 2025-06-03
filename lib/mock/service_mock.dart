@@ -135,6 +135,8 @@ class ServiceMock {
     print ('------- callbackFunction.stop -------');
 
     // Maybe remove content of List<Item>
+    _itemsBloc?.add(ClearItemsEvent());
+
 
   }
 
