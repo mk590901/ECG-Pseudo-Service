@@ -1,4 +1,4 @@
-# gui_model
+# ECG Pseudo Service
 
 A new Flutter project.
 
@@ -15,5 +15,7 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-https://github.com/user-attachments/assets/31262970-6c59-4b62-897f-5175ab62b86e
+## Movie
+
+https://github.com/user-attachments/assets/66a736a1-7cc2-4909-b9bc-ed507d772361
 
