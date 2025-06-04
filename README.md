@@ -20,6 +20,7 @@ It's quite difficult to write everything right at once. Therefore, the process i
 * GUI image of client is deleted: swipe from left to right. In this case, the pseudo client continues to generate a signal and automatically returns to the list.
 * Brutal pseudo client delete from the application: swipe from right to left.
 >__Stop button__ deletes GUI images of clients.
+
 > A significant change is related to the creation of a __widget__ for displaying the ECG signal. __Widget__ is created not in advance, before the signal display process startsbut after receiving the data, and uses the attributes of this data. 
  
 ## Movie
