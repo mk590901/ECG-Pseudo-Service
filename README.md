@@ -1,6 +1,6 @@
 # ECG Pseudo Service
 
-His project is part 2 of ECG Service Roadmap
+This project is part 2 of ECG Service Roadmap
 
 ## ECG Service Roadmap
 
