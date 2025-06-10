@@ -29,11 +29,6 @@ class AddItemEvent extends ItemsEvent {
         width: 340,
         height: 100,
         mode: GraphMode.flowing,);
-
-    // if (!graphWidget.isStarted()) {
-    //   graphWidget.start();
-    // }
-
   }
 }
 
